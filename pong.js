@@ -1,3 +1,15 @@
+ //requestanimationframe polyfill
+   window.requestAnimFrame = (function(){ 
+   	    return window.requestAnimationFrame || 
+   	           window.webkitRequestAnimationFrame || 
+   	           window.mozRequestAnimationFrame || 
+   	           window.oRequestAnimationFrame || 
+   	           window.msRequestAnimationFrame ||
+               function( callback ){ 
+                    return window.setTimeout(callback, 1000 / 60); 
+               };
+        })();
+
 (function(){
    
      var context = document.getElementById("pong");
@@ -6,8 +18,9 @@
      context.height = height;
      context.width = width;
      var con = context.getContext("2d");
-
-     con.fillRect(0, 0, width, height);
+     var particles = [];
+     var bat = [];
+     var keyPress = {};
 
  //function to setup the ball
    function Ball() {
@@ -15,8 +28,8 @@
 		this.y         = 50;
 		this.radius    = 5;
 		this.color     = "white";
-		this.velocityX = 4;
-		this.velocityY = 8;
+		this.velocityX = 8;
+		this.velocityY = 4;
    }
 
    Ball.prototype.drawBall = function(){
@@ -39,13 +52,84 @@
    	    con.fillStyle = this.color;
    	    con.fillRect(this.x, this.y, this.width, this.height);
    }
- 
+
+   //push two ball objects into the  bat array;
+   bat.push(new Bat("left"));
+   bat.push(new Bat("right"));
    var ball = new Ball();
-   ball.drawBall();
 
-   var bat1 = new Bat("left");
-   bat1.drawBat();
+   function setCanvas(){
+   	    con.fillStyle = "black";
+   	    con.fillRect(0, 0, width, height);
+   }
 
-   var bat2 = new Bat("rigth");
-   bat2.drawBat();
+   function drawSurfaces() {
+   	    setCanvas();
+   	    bat[0].drawBat();
+   	    bat[1].drawBat();
+   	    ball.drawBall(); 
+   	    animate();
+   }
+
+   function batCollision(bal, bati) {
+   	    if(bal.y + bal.radius >= bati.y && bal.y - bal.radius <= bati.y + bati.height){
+            if(bal.x >= (bati.x - bati.width) && bati.x > 0){
+                return true;
+            }
+            else if(bal.x <= bati.width && bati.x === 0){
+            	return true;
+            }
+            else return false;
+   	    }
+   }
+
+   function gameLoop(){
+   	   requestAnimFrame(gameLoop);
+   	   drawSurfaces();
+   }
+
+   function animate() {
+   	   ball.x += ball.velocityX;
+   	   ball.y += ball.velocityY;
+       
+       //listen to keybord event
+   	   if(keyPress.key === 38 || keyPress.key === 40){
+   	   	     keyPress.key === 38 ? bat[1].y -= 8 : bat[1].y += 8;
+   	   }
+   	   else if(keyPress.key === 87 || keyPress.key === 90){
+             keyPress.key === 87 ? bat[0].y -= 8 : bat[0].y += 8;
+   	   }
+       
+       //change ball direction if there is a wall collision
+   	   if(ball.y - ball.radius <= 0 ) {
+           ball.velocityY = -ball.velocityY;
+   	   }
+   	   else if (ball.y + ball.radius >= height) {
+   	   	    ball.velocityY = -ball.velocityY;
+   	   }
+       
+       //check for collision with the bat
+   	   if(batCollision(ball, bat[0])){
+   	   	    ball.velocityX = -ball.velocityX;
+   	   }
+   	   else if(batCollision(ball, bat[1])){
+   	   	    ball.velocityX = -ball.velocityX;
+   	   }
+   }
+
+   function moveBat(event) {
+        keyPress.key = event.keyCode;
+   }
+
+   function stopBat(event) {
+   	    keyPress.key = 0;
+   }
+
+   gameLoop();
+
+   addEventListener("keydown", moveBat);
+
+   addEventListener("keyup", stopBat);
+
+  
 })()

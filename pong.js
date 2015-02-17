@@ -1,16 +1,4 @@
- //requestanimationframe polyfill
-   window.requestAnimFrame = (function(){ 
-   	    return window.requestAnimationFrame || 
-   	           window.webkitRequestAnimationFrame || 
-   	           window.mozRequestAnimationFrame || 
-   	           window.oRequestAnimationFrame || 
-   	           window.msRequestAnimationFrame ||
-               function( callback ){ 
-                    return window.setTimeout(callback, 1000 / 60); 
-               };
-        })();
-
-(function(){
+ (function(){
    
      var context = document.getElementById("pong");
      var height = window.innerHeight;
@@ -18,7 +6,6 @@
      context.height = height;
      context.width = width;
      var con = context.getContext("2d");
-     var particles = [];
      var bat = [];
      var keyPress = {};
 
@@ -71,6 +58,12 @@
    	    animate();
    }
 
+  //function stops the requestanimationframe
+   function endGame() {
+         cancelRequestAnimFrame(init);
+   }
+   
+   //function to check if the ball as collided with the bat
    function batCollision(bal, bati) {
    	    if(bal.y + bal.radius >= bati.y && bal.y - bal.radius <= bati.y + bati.height){
             if(bal.x >= (bati.x - bati.width) && bati.x > 0){
@@ -82,12 +75,14 @@
             else return false;
    	    }
    }
-
+   
+   //function to call the request animation frame
    function gameLoop(){
-   	   requestAnimFrame(gameLoop);
+   	   init = requestAnimFrame(gameLoop);
    	   drawSurfaces();
    }
 
+   //function to hold the game logic
    function animate() {
    	   ball.x += ball.velocityX;
    	   ball.y += ball.velocityY;
@@ -104,8 +99,16 @@
    	   if(ball.y - ball.radius <= 0 ) {
            ball.velocityY = -ball.velocityY;
    	   }
-   	   else if (ball.y + ball.radius >= height) {
+   	   else if(ball.y + ball.radius >= height) {
    	   	    ball.velocityY = -ball.velocityY;
+   	   }
+   	   else if(ball.x + ball.radius > width){
+   	   	    ball.x = width - ball.radius;
+   	   	    endGame();
+   	   }
+   	   else if(ball.x + ball.radius < 0) {
+   	   	    ball.x = ball.radius;
+   	   	    endGame();
    	   }
        
        //check for collision with the bat

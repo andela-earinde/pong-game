@@ -7,7 +7,7 @@
      context.width = width;
      var con = context.getContext("2d");
      var bat = [];
-     var keyPress = {};
+     var keyPress = [];
      var firstScore = 0;
      var secondScore = 0;
      var player1 = "Player1";
@@ -95,7 +95,7 @@
         //add pong text to the middle of the canvas;
         con.font = "150px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText("Pong", width/2-150, height/2); 
+        con.fillText("Pong Andela", width/2-150, height/2); 
    }
 
    function drawSurfaces() {
@@ -150,11 +150,11 @@
    	   ball.y += ball.velocityY;
        
        //listen to keybord event
-   	   if(keyPress.key === 38 || keyPress.key === 40){
-   	   	     keyPress.key === 38 ? bat[1].y -= 18 : bat[1].y += 18;
+   	   if(keyPress[38] || keyPress[40]){
+   	   	     keyPress[38] ? bat[1].y -= 18 : bat[1].y += 18;
    	   }
-   	   else if(keyPress.key === 87 || keyPress.key === 90){
-             keyPress.key === 87 ? bat[0].y -= 18 : bat[0].y += 18;
+   	   if(keyPress[87] || keyPress[90]){
+             keyPress[87] ? bat[0].y -= 18 : bat[0].y += 18;
    	   }
        
        //change ball direction if there is a wall collision
@@ -195,14 +195,22 @@
    	   }
    }
 
+ //
+ // Event listening block
+ //
+  
+   //handle non-letter keys
    function moveBat(event) {
-        keyPress.key = event.keyCode;
+        keyPress[event.keyCode] = true;
    }
-
+   
+   //clear the keys object
    function stopBat(event) {
-   	    keyPress.key = 0;
+   	    keyPress[event.keyCode] = false;
    }
 
+   
+   
    function mouseClick(event) {
         
         var px = event.pageX,
@@ -233,6 +241,14 @@
              gameLoop();
         }
    }
+
+   addEventListener("keydown", moveBat);
+
+   addEventListener("keyup", stopBat);
+   addEventListener("click", mouseClick);
+ //
+ //  End of event listening block
+ //
 
    var startButton = {
         x: width/2-350,
@@ -295,11 +311,5 @@
    }
   
    startGame();
-
-   addEventListener("keydown", moveBat);
-
-   addEventListener("keyup", stopBat);
-   addEventListener("click", mouseClick);
-
   
 })()

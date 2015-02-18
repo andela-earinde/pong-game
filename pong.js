@@ -8,12 +8,14 @@
      var con = context.getContext("2d");
      var bat = [];
      var keyPress = {};
+     var firstScore = 0;
+     var secondScore = 0;
 
  //function to setup the ball
    function Ball() {
 		this.x         = 50;
 		this.y         = 50;
-		this.radius    = 5;
+		this.radius    = 8;
 		this.color     = "white";
 		this.velocityX = 8;
 		this.velocityY = 4;
@@ -28,7 +30,7 @@
 
    //function to set up bat
    function Bat(position) {
-   	    this.width = 5;
+   	    this.width = 8;
    	    this.height = 100;
    	    this.color = "white"
    	    this.x = position === "left"? 0 : width - this.width;
@@ -46,8 +48,34 @@
    var ball = new Ball();
 
    function setCanvas(){
-   	    con.fillStyle = "black";
+        //set up background
+   	    con.fillStyle = "darkgreen";
    	    con.fillRect(0, 0, width, height);
+        //setup middle line
+        con.strokeStyle = "white";
+        con.lineWidth = 10;
+        con.lineCap = 'round';
+        con.beginPath();
+        con.moveTo(width/2, 0);
+        con.lineTo(width/2, height);
+        con.stroke();
+        con.closePath();
+        //set up scores
+        con.font = "100px serif";
+        con.fillStyle = "white";
+        con.fillText(firstScore, width/2-100, 150);
+        //set up second
+        con.font = "100px serif";
+        con.fillStyle = "white";
+        con.fillText(secondScore, width/2+50, 150);
+        //set up player font
+        con.font = "50px serif";
+        con.fillStyle = "white";
+        con.fillText("Player 2", width/2+50, 50);
+        //set up second player
+        con.font = "50px serif";
+        con.fillStyle = "white";
+        con.fillText("Player 1", width/2-180, 50);
    }
 
    function drawSurfaces() {
@@ -55,12 +83,15 @@
    	    bat[0].drawBat();
    	    bat[1].drawBat();
    	    ball.drawBall(); 
+        endGame();
    	    animate();
    }
 
   //function stops the requestanimationframe
    function endGame() {
-         cancelRequestAnimFrame(init);
+       if(firstScore >= 2 || secondScore >= 2){
+            cancelRequestAnimFrame(init);
+       } 
    }
    
    //function to check if the ball as collided with the bat
@@ -102,13 +133,18 @@
    	   else if(ball.y + ball.radius >= height) {
    	   	    ball.velocityY = -ball.velocityY;
    	   }
+       //for collison on the left and right hand side
    	   else if(ball.x + ball.radius > width){
-   	   	    ball.x = width - ball.radius;
-   	   	    endGame();
+            firstScore++;
+            ball.x = width/2;
+            ball.y = height/2;
+            ball.velocityY = Math.random() * ball.velocityY;
    	   }
    	   else if(ball.x + ball.radius < 0) {
-   	   	    ball.x = ball.radius;
-   	   	    endGame();
+   	   	    secondScore++;
+            ball.x = width/2;
+            ball.y = height/2;
+            ball.velocityY = Math.random() * ball.velocityY;
    	   }
        
        //check for collision with the bat

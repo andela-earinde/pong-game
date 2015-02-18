@@ -210,7 +210,7 @@
    }
 
    
-   
+   //listen t0 mouse click events
    function mouseClick(event) {
         
         var px = event.pageX,
@@ -250,21 +250,23 @@
  //  End of event listening block
  //
 
+ // start and restart button block
+ //
    var startButton = {
-        x: width/2-350,
-        y: height/2-150,
-        w: 150,
-        h: 50, 
+        x: width/2-150,
+        y: height/2,
+        w: 250,
+        h: 100, 
         draw: function(){
              con.strokeStyle = "white";
              con.lineWidth = "2";
              con.strokeRect(this.x, this.y, this.w, this.h);
              
-             con.font = "50px monotype corsiva, serif";
+             con.font = "100px monotype corsiva, serif";
              con.textAlign = "center";
              con.textBaseline = "middle";
              con.fillStlye = "white";
-             con.fillText("Start", this.x+65, this.y+25);
+             con.fillText("Start", this.x+110, this.y+45);
         }
    }
 
@@ -286,11 +288,26 @@
             con.fillText("Restart", this.x+70, this.y+20);
         }   
    }
+    //
+   //End of start and restart button block
+ 
+
+ //block to handle initializing the game
+ //
+   function drawStartSurfaces() {
+        //set up background
+        con.fillStyle = "#0a181c";
+        con.fillRect(0, 0, width, height);
+
+        con.font = "200px monotype corsiva";
+        con.fillStyle = "white";
+        con.fillText("Pong", width/2-250, height/2-200); 
+   }
 
 
    function startGame() {
        //draw the surfaces
-        drawSurfaces();  
+        drawStartSurfaces();  
         a = prompt("First player enter your name");
         if(a && typeof a === "string"){
             player1 = a;
@@ -311,5 +328,7 @@
    }
   
    startGame();
+   //
+  //End of block 
   
 })()

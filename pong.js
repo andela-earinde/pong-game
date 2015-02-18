@@ -15,10 +15,10 @@
    function Ball() {
 		this.x         = 50;
 		this.y         = 50;
-		this.radius    = 8;
-		this.color     = "white";
-		this.velocityX = 8;
-		this.velocityY = 4;
+		this.radius    = 10;
+		this.color     = "lightgreen";
+		this.velocityX = 15;
+		this.velocityY = 8;
    }
 
    Ball.prototype.drawBall = function(){
@@ -31,8 +31,8 @@
    //function to set up bat
    function Bat(position) {
    	    this.width = 8;
-   	    this.height = 100;
-   	    this.color = "white"
+   	    this.height = 150;
+   	    this.color = "lightgreen"
    	    this.x = position === "left"? 0 : width - this.width;
    	    this.y = height - 4 *this.height;
    }
@@ -49,7 +49,7 @@
 
    function setCanvas(){
         //set up background
-   	    con.fillStyle = "darkgreen";
+   	    con.fillStyle = "#0a181c";
    	    con.fillRect(0, 0, width, height);
         //setup middle line
         con.strokeStyle = "white";
@@ -60,7 +60,11 @@
         con.lineTo(width/2, height);
         con.stroke();
         con.closePath();
-        //set up scores
+        text();
+   }
+
+   function text() {
+       //set up scores
         con.font = "100px serif";
         con.fillStyle = "white";
         con.fillText(firstScore, width/2-100, 150);
@@ -71,11 +75,15 @@
         //set up player font
         con.font = "50px serif";
         con.fillStyle = "white";
-        con.fillText("Player 2", width/2+50, 50);
+        con.fillText("Player 2", width/2+200, 50);
         //set up second player
         con.font = "50px serif";
         con.fillStyle = "white";
-        con.fillText("Player 1", width/2-180, 50);
+        con.fillText("Player 1", width/2-250, 50);
+        //add pong text to the middle of the canvas;
+        con.font = "150px monotype corsiva";
+        con.fillStyle = "white";
+        con.fillText("Pong", width/2-150, height/2); 
    }
 
    function drawSurfaces() {
@@ -89,7 +97,18 @@
 
   //function stops the requestanimationframe
    function endGame() {
-       if(firstScore >= 2 || secondScore >= 2){
+       if(firstScore >= 1 || secondScore >= 1){
+            con.fillStlye = "white";
+            con.font = "70px monotype corsiva, sans-serif";
+            con.textAlign = "center";
+            con.textBaseline = "middle";
+
+            if(firstScore > secondScore)
+                con.fillText("Game Over! Player 1 wins!", width/2+20, height/2 - 100 );
+            else
+                con.fillText("Game Over! Player 2 wins!", width/2+20, height/2 - 100);
+
+            restartButton.draw();
             cancelRequestAnimFrame(init);
        } 
    }
@@ -120,10 +139,10 @@
        
        //listen to keybord event
    	   if(keyPress.key === 38 || keyPress.key === 40){
-   	   	     keyPress.key === 38 ? bat[1].y -= 8 : bat[1].y += 8;
+   	   	     keyPress.key === 38 ? bat[1].y -= 18 : bat[1].y += 18;
    	   }
    	   else if(keyPress.key === 87 || keyPress.key === 90){
-             keyPress.key === 87 ? bat[0].y -= 8 : bat[0].y += 8;
+             keyPress.key === 87 ? bat[0].y -= 18 : bat[0].y += 18;
    	   }
        
        //change ball direction if there is a wall collision
@@ -150,9 +169,11 @@
        //check for collision with the bat
    	   if(batCollision(ball, bat[0])){
    	   	    ball.velocityX = -ball.velocityX;
+            ball.velocityY = ball.velocityY * 2*Math.random();
    	   }
    	   else if(batCollision(ball, bat[1])){
    	   	    ball.velocityX = -ball.velocityX;
+            ball.velocityY = ball.velocityY * 2*Math.random();
    	   }
    }
 
@@ -164,11 +185,75 @@
    	    keyPress.key = 0;
    }
 
-   gameLoop();
+   function mouseClick(event) {
+        
+        var px = event.pageX,
+            py = event.pageY;
+
+        if(px >= startButton.x && px <= startButton.x + 150){
+             gameLoop();
+             startButton = {};
+        }
+
+        if(px >= restartButton.x && px <= restartButton.x + 150){
+             firstScore = 0;
+             secondScore = 0;
+             drawSurfaces();
+             gameLoop();
+        }
+   }
+
+   var startButton = {
+        x: width/2-350,
+        y: height/2-150,
+        w: 150,
+        h: 50, 
+        draw: function(){
+             con.strokeStyle = "white";
+             con.lineWidth = "2";
+             con.strokeRect(this.x, this.y, this.w, this.h);
+             
+             con.font = "50px monotype corsiva, serif";
+             con.textAlign = "center";
+             con.textBaseline = "middle";
+             con.fillStlye = "white";
+             con.fillText("Start", this.x+65, this.y+25);
+        }
+   }
+
+   var restartButton = {
+       w: 150,
+       h: 50,
+       x: width/2-350,
+       y: height/2-200,
+  
+       draw: function() {
+            con.strokeStyle = "white";
+            con.lineWidth = "2";
+            con.strokeRect(this.x, this.y, this.w, this.h);
+    
+            con.font = "50px monotype corsiva, Arial";
+            con.textAlign = "center";
+            con.textBaseline = "middle";
+            con.fillStlye = "white";
+            con.fillText("Restart", this.x+70, this.y+20);
+        }   
+   }
+
+   function startGame() {
+        //draw the surfaces
+        drawSurfaces();
+       //draw the start canvas onto the screen
+       startButton.draw();
+   }
+  
+   //start the game
+   startGame();
 
    addEventListener("keydown", moveBat);
 
    addEventListener("keyup", stopBat);
+   addEventListener("click", mouseClick);
 
   
 })()

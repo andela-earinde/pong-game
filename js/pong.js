@@ -10,6 +10,7 @@
      var keyPress = [];
      var firstScore = 0;
      var secondScore = 0;
+     var score;
      var player1 = "Player1";
      var player2 = "Player2";
      var wall = document.getElementById("wall"),
@@ -83,11 +84,11 @@
         //set up second
         con.font = "100px serif";
         con.fillStyle = "white";
-        con.fillText(secondScore, width/2+50, 150);
+        con.fillText(secondScore, width/2+100, 150);
         //set up player font
         con.font = "50px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText(player2, width/2+200, 50);
+        con.fillText(player2, width/2+250, 50);
         //set up second player
         con.font = "50px monotype corsiva";
         con.fillStyle = "white";
@@ -95,7 +96,7 @@
         //add pong text to the middle of the canvas;
         con.font = "150px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText("Pong Andela", width/2-150, height/2); 
+        con.fillText("Pong Andela", width/2, height/2); 
    }
 
    function drawSurfaces() {
@@ -109,7 +110,7 @@
 
   //function stops the requestanimationframe
    function endGame() {
-       if(firstScore >= 2 || secondScore >= 2){
+       if(firstScore >= score || secondScore >= score){
             con.fillStlye = "white";
             con.font = "70px monotype corsiva, sans-serif";
             con.textAlign = "center";
@@ -298,21 +299,45 @@
         //set up background
         con.fillStyle = "#0a181c";
         con.fillRect(0, 0, width, height);
-
+        
+        //pong
         con.font = "200px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText("Pong", width/2-250, height/2-200); 
+        con.fillText("Pong", width/2-250, height/2-200);
+        
+        //title
+        con.font = "40px monotype corsiva";
+        con.fillStyle = "white";
+        con.fillText("By Eni, for Andela class-V project", width/2-100, height/2-100); 
+        
+        //player1
+        con.font = "30px monotype corsiva";
+        con.fillStyle = "white";
+        con.fillText("Player 1: use keys W to move UP and Z to move DOWN", width/2-300, height/2+200);
+
+        //player 2
+        con.font = "30px monotype corsiva";
+        con.fillStyle = "white";
+        con.fillText("Player 2: use the UP and DOWN keys to move", width/2-300, height/2+300);
    }
 
 
    function startGame() {
        //draw the surfaces
         drawStartSurfaces();  
-        a = prompt("First player enter your name");
-        if(a && typeof a === "string"){
-            player1 = a;
-            b = prompt("Second player enter your name");
-            if(b && typeof b === "string") {
+        var number = prompt("Enter the number of points to score to win the game");
+        if(!isNaN(Number(number))){
+            score = number; 
+        }
+        else{
+            score = 10;
+        }
+      
+        var name = prompt("Player1 enter your name");
+        if(typeof name === "string"){
+            player1 = name || "Player1";
+            var name2 = prompt("Player2 enter your name");
+            if(name2 && typeof name2 === "string") {
                 player2 = b;
                 startButton.draw();
             }
@@ -324,7 +349,7 @@
         else  {
           player1 = "Player 1"; 
           startButton.draw();  
-        }  
+        } 
    }
   
    startGame();

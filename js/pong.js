@@ -16,7 +16,8 @@
          hit = document.getElementById("hit"), 
          p1Score = document.getElementById("p1"), 
          p2Score = document.getElementById("p2"),
-         over = document.getElementById("over");
+         over = document.getElementById("over")
+         start = document.getElementById("start");
 
  //function to setup the ball
    function Ball() {
@@ -59,14 +60,18 @@
    	    con.fillStyle = "#0a181c";
    	    con.fillRect(0, 0, width, height);
         //setup middle line
+
+      for(var i = -20; i < 1000; i+=100){  
         con.strokeStyle = "white";
         con.lineWidth = 10;
         con.lineCap = 'round';
         con.beginPath();
-        con.moveTo(width/2, 0);
-        con.lineTo(width/2, height);
+        con.moveTo(width/2, i+50);
+        con.lineTo(width/2, i+100);
         con.stroke();
         con.closePath();
+      }
+
         text();
    }
 
@@ -104,7 +109,7 @@
 
   //function stops the requestanimationframe
    function endGame() {
-       if(firstScore >= 1 || secondScore >= 1){
+       if(firstScore >= 2 || secondScore >= 2){
             con.fillStlye = "white";
             con.font = "70px monotype corsiva, sans-serif";
             con.textAlign = "center";
@@ -123,7 +128,7 @@
    //function to check if the ball as collided with the bat
    function batCollision(bal, bati) {
    	    if(bal.y + bal.radius >= bati.y && bal.y - bal.radius <= bati.y + bati.height){
-            if(bal.x >= (bati.x - bati.width) && bati.x > 0){
+            if(bal.x >= (bati.x - bati.width-10) && bati.x > 0){
                 return true;
             }
             else if(bal.x <= bati.width && bati.x === 0){
@@ -204,14 +209,18 @@
             py = event.pageY;
 
         if(px >= startButton.x && px <= startButton.x + 150){
+             start.play();
              ball.velocityX = 20;
              ball.velocityY = 8;
+             bat[0].y = height - 3 *bat[0].height;
+             bat[1].y = height - 3 *bat[0].height;
              drawSurfaces();
              gameLoop();
              startButton = {};
         }
 
         else if(px >= restartButton.x && px <= restartButton.x + 150){
+             start.play();
              ball.x = width/2;
              ball.y = height/2;
              ball.velocityX = 20;
@@ -246,7 +255,7 @@
    var restartButton = {
        w: 150,
        h: 50,
-       x: width/2-350,
+       x: width/2-500,
        y: height/2-200,
   
        draw: function() {
@@ -262,24 +271,29 @@
         }   
    }
 
+
    function startGame() {
-      a = prompt("First player enter your name");
+       //draw the surfaces
+        drawSurfaces();  
+        a = prompt("First player enter your name");
         if(a && typeof a === "string"){
             player1 = a;
             b = prompt("Second player enter your name");
             if(b && typeof b === "string") {
                 player2 = b;
+                startButton.draw();
             }
-            else player2 = "Player 2";
+            else {
+              player2 = "Player 2";
+              startButton.draw();
+            }
         }
-        else  player1 = "Player 1";
-        //draw the surfaces
-        drawSurfaces();
-         //draw the start canvas onto the screen
-        startButton.draw();      
+        else  {
+          player1 = "Player 1"; 
+          startButton.draw();  
+        }  
    }
   
-   //start the game
    startGame();
 
    addEventListener("keydown", moveBat);

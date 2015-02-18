@@ -10,12 +10,14 @@
      var keyPress = {};
      var firstScore = 0;
      var secondScore = 0;
+     var player1 = "Player1";
+     var player2 = "Player2";
 
  //function to setup the ball
    function Ball() {
-		this.x         = 50;
-		this.y         = 50;
-		this.radius    = 10;
+		this.x         = 100;
+		this.y         = 100;
+		this.radius    = 30;
 		this.color     = "lightgreen";
 		this.velocityX = 15;
 		this.velocityY = 8;
@@ -30,7 +32,7 @@
 
    //function to set up bat
    function Bat(position) {
-   	    this.width = 8;
+   	    this.width = 20;
    	    this.height = 150;
    	    this.color = "lightgreen"
    	    this.x = position === "left"? 0 : width - this.width;
@@ -73,13 +75,13 @@
         con.fillStyle = "white";
         con.fillText(secondScore, width/2+50, 150);
         //set up player font
-        con.font = "50px serif";
+        con.font = "50px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText("Player 2", width/2+200, 50);
+        con.fillText(player2, width/2+200, 50);
         //set up second player
-        con.font = "50px serif";
+        con.font = "50px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText("Player 1", width/2-250, 50);
+        con.fillText(player1, width/2-250, 50);
         //add pong text to the middle of the canvas;
         con.font = "150px monotype corsiva";
         con.fillStyle = "white";
@@ -104,9 +106,9 @@
             con.textBaseline = "middle";
 
             if(firstScore > secondScore)
-                con.fillText("Game Over! Player 1 wins!", width/2+20, height/2 - 100 );
+                con.fillText("Game Over! "+player1+" wins!", width/2+20, height/2 - 100 );
             else
-                con.fillText("Game Over! Player 2 wins!", width/2+20, height/2 - 100);
+                con.fillText("Game Over! "+player2+" wins!", width/2+20, height/2 - 100);
 
             restartButton.draw();
             cancelRequestAnimFrame(init);
@@ -169,11 +171,11 @@
        //check for collision with the bat
    	   if(batCollision(ball, bat[0])){
    	   	    ball.velocityX = -ball.velocityX;
-            ball.velocityY = ball.velocityY * 2*Math.random();
+            ball.velocityY = ball.velocityY + 5;
    	   }
    	   else if(batCollision(ball, bat[1])){
    	   	    ball.velocityX = -ball.velocityX;
-            ball.velocityY = ball.velocityY * 2*Math.random();
+            ball.velocityY = ball.velocityY + 5;
    	   }
    }
 
@@ -191,11 +193,20 @@
             py = event.pageY;
 
         if(px >= startButton.x && px <= startButton.x + 150){
+             ball.velocityX = 20;
+             ball.velocityY = 8;
+             drawSurfaces();
              gameLoop();
              startButton = {};
         }
 
-        if(px >= restartButton.x && px <= restartButton.x + 150){
+        else if(px >= restartButton.x && px <= restartButton.x + 150){
+             ball.x = width/2;
+             ball.y = height/2;
+             ball.velocityX = 20;
+             ball.velocityY = 8;
+             bat[0].y = height - 4 *bat[0].height;
+             bat[1].y = height - 4 *bat[0].height;
              firstScore = 0;
              secondScore = 0;
              drawSurfaces();
@@ -241,10 +252,20 @@
    }
 
    function startGame() {
+      a = prompt("First player enter your name");
+        if(a && typeof a === "string"){
+            player1 = a;
+            b = prompt("Second player enter your name");
+            if(b && typeof b === "string") {
+                player2 = b;
+            }
+            else player2 = "Player 2";
+        }
+        else  player1 = "Player 1";
         //draw the surfaces
         drawSurfaces();
-       //draw the start canvas onto the screen
-       startButton.draw();
+         //draw the start canvas onto the screen
+        startButton.draw();      
    }
   
    //start the game

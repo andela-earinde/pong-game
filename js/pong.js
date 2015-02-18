@@ -12,6 +12,11 @@
      var secondScore = 0;
      var player1 = "Player1";
      var player2 = "Player2";
+     var wall = document.getElementById("wall"),
+         hit = document.getElementById("hit"), 
+         p1Score = document.getElementById("p1"), 
+         p2Score = document.getElementById("p2"),
+         over = document.getElementById("over");
 
  //function to setup the ball
    function Ball() {
@@ -36,7 +41,7 @@
    	    this.height = 150;
    	    this.color = "lightgreen"
    	    this.x = position === "left"? 0 : width - this.width;
-   	    this.y = height - 4 *this.height;
+   	    this.y = height - 3 *this.height;
    }
 
    Bat.prototype.drawBat = function() {
@@ -109,7 +114,7 @@
                 con.fillText("Game Over! "+player1+" wins!", width/2+20, height/2 - 100 );
             else
                 con.fillText("Game Over! "+player2+" wins!", width/2+20, height/2 - 100);
-
+            over.play();
             restartButton.draw();
             cancelRequestAnimFrame(init);
        } 
@@ -149,19 +154,23 @@
        
        //change ball direction if there is a wall collision
    	   if(ball.y - ball.radius <= 0 ) {
+           wall.play();
            ball.velocityY = -ball.velocityY;
    	   }
    	   else if(ball.y + ball.radius >= height) {
+            wall.play();
    	   	    ball.velocityY = -ball.velocityY;
    	   }
        //for collison on the left and right hand side
    	   else if(ball.x + ball.radius > width){
+            p1Score.play();
             firstScore++;
             ball.x = width/2;
             ball.y = height/2;
             ball.velocityY = Math.random() * ball.velocityY;
    	   }
    	   else if(ball.x + ball.radius < 0) {
+            p2Score.play();
    	   	    secondScore++;
             ball.x = width/2;
             ball.y = height/2;
@@ -170,10 +179,12 @@
        
        //check for collision with the bat
    	   if(batCollision(ball, bat[0])){
+            hit.play();
    	   	    ball.velocityX = -ball.velocityX;
             ball.velocityY = ball.velocityY + 5;
    	   }
    	   else if(batCollision(ball, bat[1])){
+            hit.play();
    	   	    ball.velocityX = -ball.velocityX;
             ball.velocityY = ball.velocityY + 5;
    	   }
@@ -205,8 +216,8 @@
              ball.y = height/2;
              ball.velocityX = 20;
              ball.velocityY = 8;
-             bat[0].y = height - 4 *bat[0].height;
-             bat[1].y = height - 4 *bat[0].height;
+             bat[0].y = height - 3 *bat[0].height;
+             bat[1].y = height - 3 *bat[0].height;
              firstScore = 0;
              secondScore = 0;
              drawSurfaces();

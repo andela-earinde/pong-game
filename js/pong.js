@@ -10,9 +10,10 @@
      var keyPress = [];
      var firstScore = 0;
      var secondScore = 0;
-     var score;
+     var score = 10;
      var player1 = "Player1";
      var player2 = "Player2";
+     var init;
      var wall = document.getElementById("wall"),
          hit = document.getElementById("hit"), 
          p1Score = document.getElementById("p1"), 
@@ -326,7 +327,7 @@
        //draw the surfaces
         drawStartSurfaces();  
         var number = prompt("Enter the number of points to score to win the game");
-        if(!isNaN(Number(number))){
+        if(number && !isNaN(Number(number))){
             score = number; 
         }
         else{
@@ -336,10 +337,10 @@
         var name = prompt("Player1 enter your name");
         if(typeof name === "string"){
             player1 = name || "Player1";
+            startButton.draw();
             var name2 = prompt("Player2 enter your name");
             if(name2 && typeof name2 === "string") {
                 player2 = b;
-                startButton.draw();
             }
             else {
               player2 = "Player 2";

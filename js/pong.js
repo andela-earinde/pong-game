@@ -326,7 +326,7 @@
    function startGame() {
        //draw the surfaces
         drawStartSurfaces();  
-        var number = prompt("Enter the number of points to score to win the game");
+        var number = prompt("Enter the number of points to score to End the game.     default = 10");
         if(number && !isNaN(Number(number))){
             score = number; 
         }

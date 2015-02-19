@@ -197,9 +197,9 @@
    	   }
    }
 
- //
- // Event listening block
- //
+ //////////////////////////
+ // Event listening block  //
+ //////////////////////////
   
    //handle non-letter keys
    function moveBat(event) {
@@ -248,9 +248,9 @@
 
    addEventListener("keyup", stopBat);
    addEventListener("click", mouseClick);
- //
- //  End of event listening block
- //
+ //////////////////////////////////
+ //  End of event listening block //
+ /////////////////////////////////
 
  // start and restart button block
  //

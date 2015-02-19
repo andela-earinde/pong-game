@@ -153,10 +153,19 @@
        
        //listen to keybord event
    	   if(keyPress[38] || keyPress[40]){
-   	   	     keyPress[38] ? bat[1].y -= 24 : bat[1].y += 24;
+            if(keyPress[38] && bat[1].y >= 0){
+                   bat[1].y -= 24;
+            }else if(keyPress[40] && bat[1].y <= (height-bat[1].height)){
+                   bat[1].y += 24;
+            }   	   	     //keyPress[38] ? bat[1].y -= 24 : bat[1].y += 24;
    	   }
    	   if(keyPress[87] || keyPress[90]){
-             keyPress[87] ? bat[0].y -= 24 : bat[0].y += 24;
+          // keyPress[87] ? bat[0].y -= 24 : bat[0].y += 24;
+          if(keyPress[87] && bat[0].y >= 0){
+                   bat[0].y -= 24;
+            }else if(keyPress[90] && bat[0].y <= (height-bat[0].height)){
+                   bat[0].y += 24;
+            }
    	   }
        
        //change ball direction if there is a wall collision

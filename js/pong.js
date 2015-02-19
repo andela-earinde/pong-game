@@ -87,15 +87,15 @@
         con.fillStyle = "white";
         con.fillText(secondScore, width/2+100, 150);
         //set up player font
-        con.font = "50px monotype corsiva";
+        con.font = "50px monotype corsiva, serif";
         con.fillStyle = "white";
         con.fillText(player2, width/2+250, 50);
         //set up second player
-        con.font = "50px monotype corsiva";
+        con.font = "50px monotype corsiva, serif";
         con.fillStyle = "white";
         con.fillText(player1, width/2-250, 50);
         //add pong text to the middle of the canvas;
-        con.font = "150px monotype corsiva";
+        con.font = "150px monotype corsiva, serif";
         con.fillStyle = "white";
         con.fillText("Pong Andela", width/2, height/2); 
    }
@@ -220,8 +220,8 @@
 
         if(px >= startButton.x && px <= startButton.x + 150){
              start.play();
-             ball.velocityX = 30;
-             ball.velocityY = 15;
+             ball.velocityX = 15;
+             ball.velocityY = 8;
              bat[0].y = height - 3 *bat[0].height;
              bat[1].y = height - 3 *bat[0].height;
              drawSurfaces();
@@ -233,8 +233,8 @@
              start.play();
              ball.x = width/2;
              ball.y = height/2;
-             ball.velocityX = 30;
-             ball.velocityY = 15;
+             ball.velocityX = 15;
+             ball.velocityY = 8;
              bat[0].y = height - 3 *bat[0].height;
              bat[1].y = height - 3 *bat[0].height;
              firstScore = 0;
@@ -340,7 +340,7 @@
             startButton.draw();
             var name2 = prompt("Player2 enter your name");
             if(name2 && typeof name2 === "string") {
-                player2 = b;
+                player2 = name2;
             }
             else {
               player2 = "Player 2";

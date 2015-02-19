@@ -153,10 +153,10 @@
        
        //listen to keybord event
    	   if(keyPress[38] || keyPress[40]){
-   	   	     keyPress[38] ? bat[1].y -= 18 : bat[1].y += 18;
+   	   	     keyPress[38] ? bat[1].y -= 24 : bat[1].y += 24;
    	   }
    	   if(keyPress[87] || keyPress[90]){
-             keyPress[87] ? bat[0].y -= 18 : bat[0].y += 18;
+             keyPress[87] ? bat[0].y -= 24 : bat[0].y += 24;
    	   }
        
        //change ball direction if there is a wall collision
@@ -212,7 +212,7 @@
    }
 
    
-   //listen t0 mouse click events
+   //listen to mouse click events
    function mouseClick(event) {
         
         var px = event.pageX,
@@ -220,8 +220,8 @@
 
         if(px >= startButton.x && px <= startButton.x + 150){
              start.play();
-             ball.velocityX = 20;
-             ball.velocityY = 8;
+             ball.velocityX = 30;
+             ball.velocityY = 15;
              bat[0].y = height - 3 *bat[0].height;
              bat[1].y = height - 3 *bat[0].height;
              drawSurfaces();
@@ -233,8 +233,8 @@
              start.play();
              ball.x = width/2;
              ball.y = height/2;
-             ball.velocityX = 20;
-             ball.velocityY = 8;
+             ball.velocityX = 30;
+             ball.velocityY = 15;
              bat[0].y = height - 3 *bat[0].height;
              bat[1].y = height - 3 *bat[0].height;
              firstScore = 0;

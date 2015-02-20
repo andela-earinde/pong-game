@@ -355,7 +355,7 @@
         //spacebar
         con.font = "30px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText("Use space bar to pause the game", width/2-300, height/2+300);
+        con.fillText("Use spacebar to pause the game", width/2-300, height/2+300);
    }
 
 

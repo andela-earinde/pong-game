@@ -11,6 +11,7 @@
      var firstScore = 0;
      var secondScore = 0;
      var score = 10;
+     var spacePress = false;
      var player1 = "Player1";
      var player2 = "Player2";
      var init;
@@ -210,9 +211,20 @@
  // Event listening block  //
  //////////////////////////
   
-   //handle non-letter keys
+   //handle key press
    function moveBat(event) {
         keyPress[event.keyCode] = true;
+
+        //listening to spacebar press
+        if(event.keyCode === 32 && !spacePress){
+             spacePress = true;
+             pause.draw();
+             cancelRequestAnimFrame(init);
+        }
+        else if(event.keyCode === 32 && spacePress){
+             spacePress = false;
+             gameLoop();
+        } 
    }
    
    //clear the keys object
@@ -261,8 +273,18 @@
  //  End of event listening block //
  /////////////////////////////////
 
- // start and restart button block
+ // start and restart button block and pause text
  //
+   var pause = {
+       x: width/2,
+       y: height/2+200,
+       draw: function(){
+            con.font = "150px monotype corsiva, serif";
+            con.fillStyle = "lightgreen";
+            con.fillText("Paused", this.x, this.y); 
+       }
+   }
+
    var startButton = {
         x: width/2-150,
         y: height/2,
@@ -328,7 +350,12 @@
         //player 2
         con.font = "30px monotype corsiva";
         con.fillStyle = "white";
-        con.fillText("Player 2: use the UP and DOWN keys to move", width/2-300, height/2+300);
+        con.fillText("Player 2: use the UP and DOWN keys to move", width/2-300, height/2+250);
+
+        //spacebar
+        con.font = "30px monotype corsiva";
+        con.fillStyle = "white";
+        con.fillText("Use space bar to pause the game", width/2-300, height/2+300);
    }
 
 
@@ -366,4 +393,4 @@
    //
   //End of block 
   
-})()
+})();

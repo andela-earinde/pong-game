@@ -174,7 +174,7 @@
            wall.play();
            ball.velocityY = -ball.velocityY;
    	   }
-   	   else if((ball.y + ball.radius+10) >= height) {
+   	   else if((ball.y + ball.radius) >= height-15) {
             wall.play();
    	   	    ball.velocityY = -ball.velocityY;
    	   }

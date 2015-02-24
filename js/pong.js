@@ -241,8 +241,8 @@
 
         if(px >= startButton.x && px <= startButton.x + 150){
              start.play();
-             ball.velocityX = 15;
-             ball.velocityY = 8;
+             //ball.velocityX = 15;
+             //ball.velocityY = 8;
              bat[0].y = height - 3 *bat[0].height;
              bat[1].y = height - 3 *bat[0].height;
              drawSurfaces();
@@ -254,14 +254,24 @@
              start.play();
              ball.x = width/2;
              ball.y = height/2;
-             ball.velocityX = 15;
-             ball.velocityY = 8;
+             //ball.velocityX = 15;
+             //ball.velocityY = 8;
              bat[0].y = height - 3 *bat[0].height;
              bat[1].y = height - 3 *bat[0].height;
              firstScore = 0;
              secondScore = 0;
              drawSurfaces();
              gameLoop();
+        }
+
+        else if(px >= changeVelBut.x && px <= changeVelBut.x + 50){
+             ball.velocityX--;
+             ball.velocityY--;
+        }
+
+        else if(px >= (changeVelBut.x +50) && px <= changeVelBut.x+ 100){
+             ball.velocityX++;
+             ball.velocityY++;
         }
    }
 
@@ -300,6 +310,40 @@
              con.textBaseline = "middle";
              con.fillStlye = "white";
              con.fillText("Start", this.x+110, this.y+45);
+        }
+   }
+
+   var changeVelBut = {
+        x: width/2-350,
+        y: height/2-200,
+        w: 50,
+        h: 50,
+        draw: function(){
+            con.font = "30px monotype corsiva, serif";
+            con.textAlign = "center";
+            con.textBaseline = "middle";
+            con.fillStlye = "white";
+            con.fillText("Change velocity: "+ball.velocityX+"x "+ball.velocityY+"y", this.x-130, this.y+20);
+
+            con.strokeStyle = "white";
+            con.lineWidth = "2";
+            con.strokeRect(this.x, this.y, this.w, this.h); 
+
+            con.font = "100px monotype corsiva, serif";
+            con.textAlign = "center";
+            con.textBaseline = "middle";
+            con.fillStlye = "white";
+            con.fillText("-", this.x+20, this.y+20);
+
+            con.strokeStyle = "white";
+            con.lineWidth = "2";
+            con.strokeRect(this.x+this.w, this.y, this.w, this.h); 
+
+            con.font = "90px monotype corsiva, serif";
+            con.textAlign = "center";
+            con.textBaseline = "middle";
+            con.fillStlye = "white";
+            con.fillText("+", this.x+65, this.y+30);
         }
    }
 
@@ -356,12 +400,14 @@
         con.font = "30px monotype corsiva";
         con.fillStyle = "white";
         con.fillText("Use spacebar to pause the game", width/2-300, height/2+300);
+
+        changeVelBut.draw();
    }
 
 
    function startGame() {
        //draw the surfaces
-        drawStartSurfaces();  
+        drawStartSurfaces();
         var number = prompt("Enter the number of points to score to End the game.     default = 10");
         if(number && !isNaN(Number(number))){
             score = number; 

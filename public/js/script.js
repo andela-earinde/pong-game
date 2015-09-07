@@ -14,11 +14,15 @@ $(document).ready(function() {
       if (users.hasOwnProperty(i)) {
         var person = users[i];
         if (userId !== person[1]) {
-          html += '<a href="' + person[1] + '" class="list-group-item">' + person[0] + '<i class="fa fa-spinner pull-right"></i> <span class="label label-success pull-right">online</span></a>';
+          html += '<a data-name="' + person[0] + '" href="' + person[1] + '" class="online-person list-group-item">' + person[0] + '<i class="fa fa-spinner pull-right"></i> <span class="label label-success pull-right">online</span></a>';
         }
       }
     }
     personsOnline.html(html);
+  };
+
+  var updatePlayerRequest = function(players) {
+    console.log(players);
   };
 
   try {
@@ -69,6 +73,16 @@ $(document).ready(function() {
 
     socket.on('person_joined', updatePlayersOnline);
     socket.on('person_left', updatePlayersOnline);
+    socket.on('player_request', updatePlayerRequest);
+
+    $(document).on('click', '.online-person', function(e) {
+      e.preventDefault();
+      var data = {
+        'id': $(this).attr('href'),
+        'name': $(this).attr('data-name')
+      };
+      socket.emit('request_player', data);
+    });
 
   }
 

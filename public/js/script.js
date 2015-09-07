@@ -36,5 +36,9 @@ $(document).ready(function() {
     socket.emit('user_joined', username);
   });
 
+  socket.on('user_id', function(user_id) {
+    console.log(user_id);
+    localStorage.setItem('pong-id', user_id);
+  });
 
 });

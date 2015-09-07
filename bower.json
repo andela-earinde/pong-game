@@ -4,5 +4,11 @@
   "homepage": "https://github.com/andela-earinde/pong-game",
   "description": "Pong Game",
   "main": "server.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bootswatch-dist": "lumen",
+    "font-awesome": "~4.4.0",
+    "jquery": "~2.1.4",
+    "normalize-css": "normalize.css#~3.0.3"
+  }
 }

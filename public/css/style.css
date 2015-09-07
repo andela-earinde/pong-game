@@ -1,0 +1,46 @@
+.notification-bar {
+  margin-right: 300px;
+}
+
+.canvas-holder {
+  border: 1px solid red;
+  margin-left: 17px;
+  margin-top: -17px;
+  height: 640px;
+}
+
+.players-online {
+  position: absolute;
+  right: -16px;
+  top: 0;
+  border: 0px solid red;
+}
+
+.players-online .fa-spin {
+  margin-left: 88px;
+}
+
+.players-online .panel-heading {
+  padding: 17px 15px !important;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+
+.players-online .panel-body {
+  height: 647px;
+  padding: 0;
+  padding-top: 10px;
+  overflow-y: auto;
+}
+
+.players-online .list-group-item {
+  border-top: none;
+  border-radius: 0 0 0 0 !important;
+}
+
+.players-online .list-group-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}

@@ -1,8 +1,12 @@
 'use strict';
 var socket = io('http://localhost:7000');
 
-socket.on('connect', function(io) {
-  console.log(io);
+socket.on('connect', function() {
+  console.log('connected to socket server');
+});
+
+socket.on('batmoved', function(data) {
+
 });
 
 var startSocket = function() {};

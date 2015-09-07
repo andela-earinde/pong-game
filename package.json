@@ -1,0 +1,26 @@
+{
+  "name": "pong-game",
+  "version": "1.0.0",
+  "description": "Pong Game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela-earinde/pong-game.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andela-earinde/pong-game/issues"
+  },
+  "homepage": "https://github.com/andela-earinde/pong-game#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.3.6"
+  }
+}

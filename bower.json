@@ -1,0 +1,8 @@
+{
+  "name": "pong-game",
+  "version": "1.0.0",
+  "homepage": "https://github.com/andela-earinde/pong-game",
+  "description": "Pong Game",
+  "main": "server.js",
+  "license": "MIT"
+}

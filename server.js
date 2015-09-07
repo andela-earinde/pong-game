@@ -26,7 +26,7 @@ io.sockets.on('connection', function(socket) {
     socket.emit("user_id", socket.id);
     socket.username = username;
     users[username] = [username, socket.id];
-    socket.broadcast.emit("person_joined", users);
+    io.sockets.emit("person_joined", users);
   });
 
   socket.on("disconnect", function() {

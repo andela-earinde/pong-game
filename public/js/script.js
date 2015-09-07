@@ -2,7 +2,19 @@
 $(document).ready(function() {
   var modal = $('#signupModal');
   var saveBtn = $('#save-btn');
+  var personsOnline = $('.persons-online');
   var server = 'http://192.168.101.222:7000';
+
+  var updatePlayersOnline = function(users) {
+    var html = '';
+    for (var i in users) {
+      if (users.hasOwnProperty(i)) {
+        var person = users[i];
+        html += '<a href="' + person[1] + '" class="list-group-item">' + person[0] + '<i class="fa fa-spinner pull-right"></i> <span class="label label-success pull-right">online</span></a>';
+      }
+    }
+    personsOnline.html(html);
+  };
 
   try {
     var socket = io.connect(server);
@@ -42,9 +54,8 @@ $(document).ready(function() {
       localStorage.setItem('pong-id', user_id);
     });
 
-    socket.on('person_joined', function(username, user_id) {
-      console.log(arguments);
-    });
+    socket.on('person_joined', updatePlayersOnline);
+    socket.on('person_left', updatePlayersOnline);
 
   }
 

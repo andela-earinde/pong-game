@@ -33,15 +33,15 @@ $(document).ready(function() {
 
   socket.on('connect', function(data) {
     console.log('connected to socket server');
-    socket.emit('user_joined', username);
   });
 
   socket.on('user_id', function(user_id) {
     localStorage.setItem('pong-id', user_id);
+    socket.emit('user_joined', username);
   });
 
-  socket.on('user_joined', function(username, user_id) {
-    console.log('user joined ' + arguments);
+  socket.on('person_joined', function(username, user_id) {
+    console.log('person joined ' + arguments);
   });
 
 });

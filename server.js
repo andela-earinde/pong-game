@@ -32,7 +32,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on("disconnect", function() {
     delete users[socket.username];
-    socket.broadcast.emit("person_left", user);
+    socket.broadcast.emit("person_left", users);
   });
 
 });

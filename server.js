@@ -19,10 +19,11 @@ var server = app.listen(config.port, function() {
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function(socket) {
-  console.log('socket server started');
 
-  socket.on('keypress', function(data) {
-    io.sockets.emit('batmoved', data);
+  socket.emit("user_id", socket.id);
+
+  socket.on("user_joined", function(data) {
+    socket.broadcast.emit("user_joined", data, socket.id);
   });
 
 });

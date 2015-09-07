@@ -1,6 +1,6 @@
 'use strict';
 $(document).ready(function() {
-  var socket;
+  var socket = io.connect('http://localhost:7000');
   var modal = $('#signupModal');
   var saveBtn = $('#save-btn');
 
@@ -22,14 +22,6 @@ $(document).ready(function() {
       modal.modal('hide');
     }
   });
-
-  if (username !== null) {
-    try {
-      socket = io.connect('http://localhost:7000');
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   socket.on('connect', function(data) {
     console.log('connected to socket server');

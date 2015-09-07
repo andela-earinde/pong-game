@@ -10,6 +10,7 @@ $(document).ready(function() {
   var notificationList = $('#notification-list');
   var PlayersOnline = [];
   var PlayRequest = [];
+  var currentRoom = null;
 
   var updatePlayersOnline = function(users) {
     var html = '';
@@ -91,6 +92,12 @@ $(document).ready(function() {
     socket.on('person_joined', updatePlayersOnline);
     socket.on('person_left', updatePlayersOnline);
     socket.on('player_request', updatePlayerRequest);
+    socket.on('room_created', function(room) {
+      socket.emit('join_room', room);
+    });
+    socket.on('game_on', function(room) {
+      currentRoom = room;
+    });
 
     $(document).on('click', '.online-person', function(e) {
       e.preventDefault();

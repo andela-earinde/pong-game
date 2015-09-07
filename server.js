@@ -18,12 +18,21 @@ var server = app.listen(config.port, function() {
 
 var io = require('socket.io').listen(server);
 
+var users = {};
+
 io.sockets.on('connection', function(socket) {
 
   socket.emit("user_id", socket.id);
 
-  socket.on("user_joined", function(data) {
-    socket.broadcast.emit("person_joined", data, socket.id);
+  socket.on("user_joined", function(username) {
+    socket.username = username;
+    users[username] = [username, socket.id];
+    socket.broadcast.emit("person_joined", users);
+  });
+
+  socket.on("disconnect", function() {
+    delete user[socket.username];
+    socket.broadcast.emit("person_left", user);
   });
 
 });

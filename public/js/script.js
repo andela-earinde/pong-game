@@ -33,7 +33,7 @@ $(document).ready(function() {
   });
 
   socket.on('person_joined', function(username, user_id) {
-    console.log('person joined ' + arguments);
+    console.log(arguments);
   });
 
 });

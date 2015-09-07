@@ -37,8 +37,11 @@ $(document).ready(function() {
   });
 
   socket.on('user_id', function(user_id) {
-    console.log(user_id);
     localStorage.setItem('pong-id', user_id);
+  });
+
+  socket.on('user_joined', function(username, user_id) {
+    console.log('user joined ' + arguments);
   });
 
 });

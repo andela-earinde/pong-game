@@ -22,9 +22,8 @@ var users = {};
 
 io.sockets.on('connection', function(socket) {
 
-  socket.emit("user_id", socket.id);
-
   socket.on("user_joined", function(username) {
+    socket.emit("user_id", socket.id);
     socket.username = username;
     users[username] = [username, socket.id];
     socket.broadcast.emit("person_joined", users);

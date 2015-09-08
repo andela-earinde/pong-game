@@ -59,7 +59,7 @@ io.sockets.on('connection', function(socket) {
   socket.on('player_request_denied', function(data) {
     for (var i in request[socket.username]) {
       if(request[socket.username][i].id === data.id) {
-        delete request[socket.username][i];
+        request[socket.username].splice(i, 1);
       }
     }
     socket.broadcast.to(data.id).emit('player_request', request[socket.username]);

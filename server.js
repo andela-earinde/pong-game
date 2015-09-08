@@ -63,7 +63,7 @@ io.sockets.on('connection', function(socket) {
       }
     }
     socket.broadcast.to(data.id).emit('player_request', request[socket.username], socket.id);
-    socket.emit('player_request', request[socket.username]);
+    socket.broadcast.to(socket.id).emit('player_request', request[socket.username]);
   });
 
   socket.on('disconnect', function() {

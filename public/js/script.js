@@ -10,6 +10,7 @@ $(document).ready(function() {
   var counter = $('#notification-counter');
   var notificationList = $('#notification-list');
   var totalOnline = $('#total-online');
+  var canvasHolder = $('.canvas-holder');
   var PlayersOnline = [];
   var PlayRequest = [];
   var currentRoom = null;
@@ -23,7 +24,7 @@ $(document).ready(function() {
         PlayersOnline.push(users[i]);
         var person = users[i];
         if (userId !== person[1]) {
-          html += '<a data-name="' + person[0] + '" href="' + person[1] + '" class="online-person list-group-item">' + person[0] + '<i class="fa fa-spinner pull-right"></i> <span class="label label-success pull-right">online</span></a>';
+          html += '<a data-name="' + person[0] + '" href="' + person[1] + '" class="online-person list-group-item"><i class="fa fa-user"></i> &nbsp;&nbsp;' + person[0] + '<i class="fa fa-spinner pull-right"></i> <span class="label label-success pull-right">online</span></a>';
         }
       }
     }
@@ -39,12 +40,15 @@ $(document).ready(function() {
     } else {
       counter.removeClass('label-danger').addClass('lable-default').html(length);
     }
-    players.forEach(function(person) {
-      PlayRequest.push(person.id);
-      html += '<li><a class="accept-player-request" href="' + person.id + '">' + person.name + '</a></li>';
-      html += '<li class="divider"></li>';
-    });
-    notificationList.html(html);
+
+    if (players !== null) {
+      players.forEach(function(person) {
+        PlayRequest.push(person.id);
+        html += '<li><a class="accept-player-request" href="' + person.id + '">' + person.name + '</a></li>';
+        html += '<li class="divider"></li>';
+      });
+      notificationList.html(html);
+    }
   };
 
   var joinRoom = function(room) {
@@ -52,10 +56,16 @@ $(document).ready(function() {
   };
 
   var startGame = function(room) {
+    console.log(room);
     if (room) {
       currentRoom = room;
     }
-    rightBar.css('right', '-36px');
+    rightBar.animate({
+      'right': '-100px'
+    }, 'slow');
+    canvasHolder.animate({
+      'width': '81%'
+    }, 'slow');
   };
 
   try {
@@ -120,7 +130,7 @@ $(document).ready(function() {
         $(this).addClass('disabled');
         socket.emit('request_player', data);
         $(this).find('span').html('requesting').removeClass('label-success').addClass('label-info');
-        $(this).find('i').show().addClass('fa-spin');
+        $(this).find('.fa-spinner').show().addClass('fa-spin');
       }
     });
 

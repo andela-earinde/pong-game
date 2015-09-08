@@ -32,8 +32,7 @@ $(document).ready(function() {
     personsOnline.html(html);
   };
 
-  var updatePlayerRequest = function(players) {
-    console.log(players);
+  var updatePlayerRequest = function(players, declined_user) {
     var length = players.length;
     var html = '';
     if (length > 0) {
@@ -41,13 +40,18 @@ $(document).ready(function() {
     } else {
       counter.removeClass('label-danger').addClass('lable-default').html(length);
     }
-
     players.forEach(function(person) {
       PlayRequest.push(person.id);
       html += '<li><a class="accept-player-request" href="' + person.id + '">' + person.name + '</a></li>';
       html += '<li class="divider"></li>';
     });
     notificationList.html(html);
+
+    if (declined_user) {
+      console.log(declined_user);
+      $('#' + declined_user).find('span').html('online').removeClass('label-info').addClass('label-success');
+      $('#' + declined_user).find('.fa-spinner').hide().removeClass('fa-spin');
+    }
   };
 
   var joinRoom = function(room) {
@@ -128,6 +132,7 @@ $(document).ready(function() {
       if (PlayRequest.indexOf(data.id) == -1 && !$(this).hasClass('disabled')) {
         $(this).addClass('disabled');
         socket.emit('request_player', data);
+        $(this).attr('id', data.id);
         $(this).find('span').html('requesting').removeClass('label-success').addClass('label-info');
         $(this).find('.fa-spinner').show().addClass('fa-spin');
       }

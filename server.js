@@ -43,6 +43,28 @@ io.sockets.on('connection', function(socket) {
     socket.broadcast.to(data.id).emit('player_request', request[data.name]);
   });
 
+  socket.on('player_request_confirmed', function(data) {
+    var room = data.name+'_'+socket.username;
+    socket.join(room);
+    delete request[socket.username]
+    socket.broadcast.to(data.id).emit('room_created', room);
+    socket.broadcast.to(data.id).emit('player_request', []);
+  });
+
+  socket.on('join_room', function(roomName) {
+    socket.join(roomName);
+    io.sockets.to(roomName).emit('game_on', roomName);
+  });
+
+  socket.on('player_request_denied', function(data) {
+    for (var i in request[socket.username]) {
+      if(request[socket.username][i].id === data.id) {
+        delete request[socket.username][i];
+      }
+    }
+    socket.broadcast.to(data.id).emit('player_request', request[socket.username]);
+  });
+
   socket.on('disconnect', function() {
     delete users[socket.username];
     socket.broadcast.emit('person_left', users);

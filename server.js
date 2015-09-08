@@ -1,15 +1,18 @@
 'use strict';
-
 var express = require('express');
 var app = express();
 var config = {
   port: process.env.PORT || 7000
 };
 
-app.use(express.static('public'));
+app.set('view engine', 'ejs');
+app.use(express.static('views'));
 
 app.get('/', function(req, res) {
-  res.sendFile('./public/index.html');
+  var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  res.render('./index', {
+    host: fullUrl
+  });
 });
 
 var server = app.listen(config.port, function() {
@@ -31,20 +34,23 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('request_player', function(data) {
-    if(request[data.name]) {
-      request[data.name].push({id:socket.id,
-                              name: socket.username});
-    }
-    else {
+    if (request[data.name]) {
+      request[data.name].push({
+        id: socket.id,
+        name: socket.username
+      });
+    } else {
       request[data.name] = [];
-      request[data.name].push({id:socket.id,
-                              name: socket.username});
+      request[data.name].push({
+        id: socket.id,
+        name: socket.username
+      });
     }
     socket.broadcast.to(data.id).emit('player_request', request[data.name]);
   });
 
   socket.on('player_request_confirmed', function(data) {
-    var room = data.name+'_'+socket.username;
+    var room = data.name + '_' + socket.username;
     socket.join(room);
     delete request[socket.username]
     socket.broadcast.to(data.id).emit('room_created', room);
@@ -58,7 +64,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('player_request_denied', function(data) {
     for (var i in request[socket.username]) {
-      if(request[socket.username][i].id === data.id) {
+      if (request[socket.username][i].id === data.id) {
         request[socket.username].splice(i, 1);
       }
     }

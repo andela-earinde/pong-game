@@ -3,7 +3,6 @@ $(document).ready(function() {
   var modal = $('#signupModal');
   var saveBtn = $('#save-btn');
   var personsOnline = $('.persons-online');
-  var server = 'http://192.168.101.222:7000';
   var status = $('#connection-status');
   var personsName = $('#persons-name');
   var rightBar = $('.players-online');
@@ -33,6 +32,7 @@ $(document).ready(function() {
   };
 
   var updatePlayerRequest = function(players, declined_user) {
+    console.log(arguments);
     var length = players.length;
     var html = '';
     if (length > 0) {
@@ -73,7 +73,7 @@ $(document).ready(function() {
   };
 
   try {
-    var socket = io.connect(server);
+    var socket = io.connect(SERVER);
   } catch (e) {
     console.log(e);
   }

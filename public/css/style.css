@@ -3,10 +3,10 @@
 }
 
 .canvas-holder {
-  border: 1px solid blue;
   margin-left: 17px;
   margin-top: -17px;
   height: 640px;
+  background-color: #f7f7f7;
 }
 
 .players-online {
@@ -14,6 +14,10 @@
   right: -16px;
   top: 0;
   border: 0px solid red;
+}
+
+.online-person {
+  border-bottom: 1px solid #111;
 }
 
 .players-online .fa-spinner {
@@ -31,11 +35,16 @@
   padding: 0;
   padding-top: 10px;
   overflow-y: auto;
+  background-color: #f2f2f2;
 }
 
 .players-online .list-group-item {
   border-top: none;
   border-radius: 0 0 0 0 !important;
+}
+
+.players-online .list-group-item:first-child {
+  margin-top: -9px;
 }
 
 .players-online .list-group-item:last-child {

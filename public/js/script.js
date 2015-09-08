@@ -6,13 +6,16 @@ $(document).ready(function() {
   var server = 'http://192.168.101.222:7000';
   var status = $('#connection-status');
   var personsName = $('#persons-name');
+  var rightBar = $('.players-online');
   var counter = $('#notification-counter');
   var notificationList = $('#notification-list');
+  var totalOnline = $('#total-online');
   var PlayersOnline = [];
   var PlayRequest = [];
   var currentRoom = null;
 
   var updatePlayersOnline = function(users) {
+    PlayersOnline = []; // reset
     var html = '';
     var userId = localStorage.getItem('pong-id');
     for (var i in users) {
@@ -24,6 +27,7 @@ $(document).ready(function() {
         }
       }
     }
+    totalOnline.html(PlayersOnline.length - 1);
     personsOnline.html(html);
   };
 
@@ -41,6 +45,17 @@ $(document).ready(function() {
       html += '<li class="divider"></li>';
     });
     notificationList.html(html);
+  };
+
+  var joinRoom = function(room) {
+    socket.emit('join_room', room);
+  };
+
+  var startGame = function(room) {
+    if (room) {
+      currentRoom = room;
+    }
+    rightBar.css('right', '-36px');
   };
 
   try {
@@ -92,12 +107,8 @@ $(document).ready(function() {
     socket.on('person_joined', updatePlayersOnline);
     socket.on('person_left', updatePlayersOnline);
     socket.on('player_request', updatePlayerRequest);
-    socket.on('room_created', function(room) {
-      socket.emit('join_room', room);
-    });
-    socket.on('game_on', function(room) {
-      currentRoom = room;
-    });
+    socket.on('room_created', joinRoom);
+    socket.on('game_on', startGame);
 
     $(document).on('click', '.online-person', function(e) {
       e.preventDefault();
@@ -109,6 +120,7 @@ $(document).ready(function() {
         $(this).addClass('disabled');
         socket.emit('request_player', data);
         $(this).find('span').html('requesting').removeClass('label-success').addClass('label-info');
+        $(this).find('i').show().addClass('fa-spin');
       }
     });
 

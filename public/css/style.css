@@ -17,7 +17,7 @@
 }
 
 .online-person {
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid #158cba !important;
 }
 
 .players-online .fa-spinner {

@@ -49,6 +49,7 @@ $(document).ready(function() {
 
     if (declined_user) {
       console.log(declined_user);
+      $('#' + declined_user).removeClass('disabled');
       $('#' + declined_user).find('span').html('online').removeClass('label-info').addClass('label-success');
       $('#' + declined_user).find('.fa-spinner').hide().removeClass('fa-spin');
     }

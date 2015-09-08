@@ -33,6 +33,7 @@ $(document).ready(function() {
   };
 
   var updatePlayerRequest = function(players) {
+    console.log(players);
     var length = players.length;
     var html = '';
     if (length > 0) {
@@ -41,14 +42,12 @@ $(document).ready(function() {
       counter.removeClass('label-danger').addClass('lable-default').html(length);
     }
 
-    if (players !== null) {
-      players.forEach(function(person) {
-        PlayRequest.push(person.id);
-        html += '<li><a class="accept-player-request" href="' + person.id + '">' + person.name + '</a></li>';
-        html += '<li class="divider"></li>';
-      });
-      notificationList.html(html);
-    }
+    players.forEach(function(person) {
+      PlayRequest.push(person.id);
+      html += '<li><a class="accept-player-request" href="' + person.id + '">' + person.name + '</a></li>';
+      html += '<li class="divider"></li>';
+    });
+    notificationList.html(html);
   };
 
   var joinRoom = function(room) {

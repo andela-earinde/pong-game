@@ -6,19 +6,56 @@ $(document).ready(function() {
   var server = 'http://192.168.101.222:7000';
   var status = $('#connection-status');
   var personsName = $('#persons-name');
+  var rightBar = $('.players-online');
+  var counter = $('#notification-counter');
+  var notificationList = $('#notification-list');
+  var totalOnline = $('#total-online');
+  var PlayersOnline = [];
+  var PlayRequest = [];
+  var currentRoom = null;
 
   var updatePlayersOnline = function(users) {
+    PlayersOnline = []; // reset
     var html = '';
     var userId = localStorage.getItem('pong-id');
     for (var i in users) {
       if (users.hasOwnProperty(i)) {
+        PlayersOnline.push(users[i]);
         var person = users[i];
         if (userId !== person[1]) {
-          html += '<a href="' + person[1] + '" class="list-group-item">' + person[0] + '<i class="fa fa-spinner pull-right"></i> <span class="label label-success pull-right">online</span></a>';
+          html += '<a data-name="' + person[0] + '" href="' + person[1] + '" class="online-person list-group-item">' + person[0] + '<i class="fa fa-spinner pull-right"></i> <span class="label label-success pull-right">online</span></a>';
         }
       }
     }
+    totalOnline.html(PlayersOnline.length - 1);
     personsOnline.html(html);
+  };
+
+  var updatePlayerRequest = function(players) {
+    var length = players.length;
+    var html = '';
+    if (length > 0) {
+      counter.removeClass('label-default').addClass('label-danger').html(length);
+    } else {
+      counter.removeClass('label-danger').addClass('lable-default').html(length);
+    }
+    players.forEach(function(person) {
+      PlayRequest.push(person.id);
+      html += '<li><a class="accept-player-request" href="' + person.id + '">' + person.name + '</a></li>';
+      html += '<li class="divider"></li>';
+    });
+    notificationList.html(html);
+  };
+
+  var joinRoom = function(room) {
+    socket.emit('join_room', room);
+  };
+
+  var startGame = function(room) {
+    if (room) {
+      currentRoom = room;
+    }
+    rightBar.css('right', '-36px');
   };
 
   try {
@@ -69,6 +106,37 @@ $(document).ready(function() {
 
     socket.on('person_joined', updatePlayersOnline);
     socket.on('person_left', updatePlayersOnline);
+    socket.on('player_request', updatePlayerRequest);
+    socket.on('room_created', joinRoom);
+    socket.on('game_on', startGame);
+
+    $(document).on('click', '.online-person', function(e) {
+      e.preventDefault();
+      var data = {
+        'id': $(this).attr('href'),
+        'name': $(this).attr('data-name')
+      };
+      if (PlayRequest.indexOf(data.id) == -1 && !$(this).hasClass('disabled')) {
+        $(this).addClass('disabled');
+        socket.emit('request_player', data);
+        $(this).find('span').html('requesting').removeClass('label-success').addClass('label-info');
+        $(this).find('i').show().addClass('fa-spin');
+      }
+    });
+
+    $(document).on('click', '.accept-player-request', function(e) {
+      e.preventDefault();
+      var data = {
+        'id': $(this).attr('href'),
+        'name': $(this).text()
+      };
+      var verify = confirm('sure you want to play with ' + data.name);
+      if (verify === true) {
+        socket.emit('player_request_confirmed', data);
+      } else {
+        socket.emit('player_request_denied', data);
+      }
+    });
 
   }
 

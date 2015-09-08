@@ -62,7 +62,7 @@ io.sockets.on('connection', function(socket) {
         request[socket.username].splice(i, 1);
       }
     }
-    socket.broadcast.to(data.id).emit('player_request', request[socket.username]);
+    socket.broadcast.to(data.id).emit('player_request', request[socket.username], socket.id);
     socket.emit('player_request', request[socket.username]);
   });
 
